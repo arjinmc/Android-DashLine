@@ -1,7 +1,7 @@
 # Android-DashLine
 a custom view for dash line with several colors
 
-![img](https://github.com/arjinmc/Android-DashLine/blob/master/images/device-2017-07-13-210133.png) 
+<img src="https://github.com/arjinmc/Android-DashLine/blob/master/images/device-2017-07-13-210133.png" width="50%" height="50%"/>
 
 It's easy to use.
 
