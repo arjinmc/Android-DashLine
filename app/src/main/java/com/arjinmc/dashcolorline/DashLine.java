@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Created by arjinmc on 13/7/17.
@@ -62,12 +63,11 @@ public class DashLine extends View {
             TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.dashLine);
             mDashWidth = (int) typedArray.getDimension(R.styleable.dashLine_dashWidth, 30f);
             mDashGap = (int) typedArray.getDimension(R.styleable.dashLine_dashGap, 10f);
-            mThickness = (int) typedArray.getDimension(R.styleable.dashLine_thickness, 10f);
             mOrientation = typedArray.getInt(R.styleable.dashLine_orientation, HORIZONTAL);
         }
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeWidth(mThickness);
+
     }
 
     public void setColors(@ColorInt int... colors) {
@@ -99,6 +99,8 @@ public class DashLine extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+
+        mPaint.setStrokeWidth(mThickness);
 
         PathEffect effects = new DashPathEffect(new float[]{0, 0, mDashWidth, mThickness}, mDashGap);
         mPaint.setPathEffect(effects);
@@ -144,10 +146,65 @@ public class DashLine extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        int width = 0, height = 0;
+
         if (mOrientation == VERTICAL) {
-            setMeasuredDimension(mThickness, heightMeasureSpec);
+            if (getLayoutParams().width == ViewGroup.LayoutParams.MATCH_PARENT)
+                width = MeasureSpec.getSize(widthMeasureSpec);
+            else if (getLayoutParams().width == ViewGroup.LayoutParams.WRAP_CONTENT)
+                width = mThickness;
+            else if (getLayoutParams().width != ViewGroup.LayoutParams.WRAP_CONTENT)
+                width = getLayoutParams().width;
         } else {
-            setMeasuredDimension(widthMeasureSpec, mThickness);
+            if (getLayoutParams().height == ViewGroup.LayoutParams.MATCH_PARENT)
+                height = MeasureSpec.getSize(heightMeasureSpec);
+            else if (getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT)
+                height = mThickness;
+            else if (getLayoutParams().height != ViewGroup.LayoutParams.WRAP_CONTENT)
+                height = getLayoutParams().height;
+        }
+
+        int specWidth = MeasureSpec.getSize(widthMeasureSpec);
+        int specHeight = MeasureSpec.getSize(heightMeasureSpec);
+
+
+        if (mOrientation == VERTICAL) {
+            switch (MeasureSpec.getMode(widthMeasureSpec)) {
+                case MeasureSpec.EXACTLY:
+                    width = specWidth;
+                    break;
+                case MeasureSpec.AT_MOST:
+                    width = Math.min(width, specWidth);
+                    break;
+                case MeasureSpec.UNSPECIFIED:
+                    break;
+            }
+        } else {
+            width = widthMeasureSpec;
+        }
+
+        if (mOrientation == HORIZONTAL) {
+            switch (MeasureSpec.getMode(heightMeasureSpec)) {
+                case MeasureSpec.EXACTLY:
+                    height = specHeight;
+                    break;
+                case MeasureSpec.AT_MOST:
+                    height = Math.min(height, specHeight);
+                    break;
+                case MeasureSpec.UNSPECIFIED:
+                    break;
+            }
+        } else {
+            height = heightMeasureSpec;
+        }
+
+        if (mOrientation == VERTICAL) {
+            mThickness = width;
+            setMeasuredDimension(width, heightMeasureSpec);
+        } else {
+            mThickness = height;
+            setMeasuredDimension(widthMeasureSpec, height);
         }
 
     }

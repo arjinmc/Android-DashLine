@@ -3,7 +3,6 @@
     <declare-styleable name="dashLine">
         <attr name="dashWidth" format="dimension" />
         <attr name="dashGap" format="dimension" />
-        <attr name="thickness" format="dimension" />
         <attr name="orientation" format="enum">
             <enum name="vertical" value="1" />
             <enum name="horizontal" value="0" />

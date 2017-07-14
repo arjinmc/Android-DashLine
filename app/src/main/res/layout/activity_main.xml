@@ -12,14 +12,15 @@
         app:dashGap="6dp"
         app:dashWidth="50dp"
         app:orientation="horizontal"
-        app:thickness="10dp" />
+        />
 
     <com.arjinmc.dashcolorline.DashLine
-        android:layout_width="wrap_content"
+        android:id="@+id/dashline_v"
+        android:layout_width="20dp"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
         app:dashWidth="50dp"
-        app:orientation="vertical" />
+        app:orientation="vertical"/>
 
 
 </LinearLayout>
