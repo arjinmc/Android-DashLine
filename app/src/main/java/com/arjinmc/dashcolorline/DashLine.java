@@ -4,10 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PathEffect;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
@@ -102,9 +99,6 @@ public class DashLine extends View {
 
         mPaint.setStrokeWidth(mThickness);
 
-        PathEffect effects = new DashPathEffect(new float[]{0, 0, mDashWidth, mThickness}, mDashGap);
-        mPaint.setPathEffect(effects);
-
         if (mLineCount == 0) {
             calCount();
         }
@@ -115,14 +109,11 @@ public class DashLine extends View {
             int myWidth = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
 
             for (int i = 0; i < mLineCount; i++) {
-                Path path = new Path();
-                path.moveTo(x, i * yWidth);
-                if (i == mLineCount - 1 && (mLineCount * yWidth > myWidth)) {
-                    path.lineTo(x, myWidth);
-                } else
-                    path.lineTo(x, i * yWidth + mDashWidth);
                 mPaint.setColor(mColors[i % mColorCount]);
-                canvas.drawPath(path, mPaint);
+                if (i == mLineCount - 1 && ((mLineCount - 1) * yWidth + mDashWidth > myWidth)) {
+                    canvas.drawLine(x, i * yWidth, x, myWidth, mPaint);
+                } else
+                    canvas.drawLine(x, i * yWidth, x, i * yWidth + mDashWidth, mPaint);
             }
         } else {
 
@@ -130,14 +121,11 @@ public class DashLine extends View {
             int y = mThickness / 2;
             int myWidth = getMeasuredWidth() - getPaddingLeft() - getPaddingRight();
             for (int i = 0; i < mLineCount; i++) {
-                Path path = new Path();
-                path.moveTo(i * xWidth, y);
-                if (i == mLineCount - 1 && (mLineCount * xWidth > myWidth)) {
-                    path.lineTo(myWidth, y);
-                } else
-                    path.lineTo(i * xWidth + mDashWidth, y);
                 mPaint.setColor(mColors[i % mColorCount]);
-                canvas.drawPath(path, mPaint);
+                if (i == mLineCount - 1 && ((mLineCount - 1) * xWidth + mDashWidth > myWidth)) {
+                    canvas.drawLine(i * xWidth, y, myWidth, y, mPaint);
+                } else
+                    canvas.drawLine(i * xWidth, y, i * xWidth + mDashWidth, y, mPaint);
             }
         }
         super.onDraw(canvas);
