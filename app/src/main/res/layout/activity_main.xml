@@ -8,18 +8,25 @@
     <com.arjinmc.dashcolorline.DashLine
         android:id="@+id/dashline_h"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:dashGap="6dp"
-        app:dashWidth="50dp"
+        android:layout_height="50dp"
+        app:dashGap="20dp"
+        app:dashWidth="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="1dp"
+        android:paddingRight="10dp"
         app:orientation="horizontal"
         />
 
     <com.arjinmc.dashcolorline.DashLine
         android:id="@+id/dashline_v"
-        android:layout_width="20dp"
+        android:layout_width="30dp"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
-        app:dashWidth="50dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        app:dashWidth="100dp"
+        app:dashGap="40dp"
         app:orientation="vertical"/>
 
 

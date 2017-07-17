@@ -105,27 +105,31 @@ public class DashLine extends View {
 
         if (mOrientation == VERTICAL) {
             int yWidth = mDashWidth + mDashGap;
-            int x = mThickness / 2;
+            int x = (getMeasuredWidth() - getPaddingRight() + getPaddingLeft()) / 2;
             int myWidth = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
 
             for (int i = 0; i < mLineCount; i++) {
                 mPaint.setColor(mColors[i % mColorCount]);
-                if (i == mLineCount - 1 && ((mLineCount - 1) * yWidth + mDashWidth > myWidth)) {
-                    canvas.drawLine(x, i * yWidth, x, myWidth, mPaint);
-                } else
-                    canvas.drawLine(x, i * yWidth, x, i * yWidth + mDashWidth, mPaint);
+                if (i == mLineCount - 1 && ((mLineCount - 1) * yWidth + mDashWidth > myWidth))
+                    canvas.drawLine(x, i * yWidth + getPaddingTop()
+                            , x, myWidth, mPaint);
+                else
+                    canvas.drawLine(x, i * yWidth + getPaddingTop()
+                            , x, i * yWidth + getPaddingTop() + mDashWidth, mPaint);
             }
         } else {
 
             int xWidth = mDashWidth + mDashGap;
-            int y = mThickness / 2;
+            int y = (getMeasuredHeight() - getPaddingBottom() + getPaddingTop()) / 2;
             int myWidth = getMeasuredWidth() - getPaddingLeft() - getPaddingRight();
             for (int i = 0; i < mLineCount; i++) {
                 mPaint.setColor(mColors[i % mColorCount]);
-                if (i == mLineCount - 1 && ((mLineCount - 1) * xWidth + mDashWidth > myWidth)) {
-                    canvas.drawLine(i * xWidth, y, myWidth, y, mPaint);
-                } else
-                    canvas.drawLine(i * xWidth, y, i * xWidth + mDashWidth, y, mPaint);
+                if (i == mLineCount - 1 && ((mLineCount - 1) * xWidth + mDashWidth > myWidth))
+                    canvas.drawLine(i * xWidth + getPaddingLeft(), y
+                            , myWidth, y, mPaint);
+                else
+                    canvas.drawLine(i * xWidth + getPaddingLeft(), y
+                            , i * xWidth + mDashWidth + getPaddingLeft(), y, mPaint);
             }
         }
         super.onDraw(canvas);
@@ -137,25 +141,24 @@ public class DashLine extends View {
 
         int width = 0, height = 0;
 
+        int specWidth = MeasureSpec.getSize(widthMeasureSpec);
+        int specHeight = MeasureSpec.getSize(heightMeasureSpec);
+
         if (mOrientation == VERTICAL) {
             if (getLayoutParams().width == ViewGroup.LayoutParams.MATCH_PARENT)
-                width = MeasureSpec.getSize(widthMeasureSpec);
+                width = specWidth;
             else if (getLayoutParams().width == ViewGroup.LayoutParams.WRAP_CONTENT)
                 width = mThickness;
             else if (getLayoutParams().width != ViewGroup.LayoutParams.WRAP_CONTENT)
                 width = getLayoutParams().width;
         } else {
             if (getLayoutParams().height == ViewGroup.LayoutParams.MATCH_PARENT)
-                height = MeasureSpec.getSize(heightMeasureSpec);
+                height = specHeight;
             else if (getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT)
                 height = mThickness;
             else if (getLayoutParams().height != ViewGroup.LayoutParams.WRAP_CONTENT)
                 height = getLayoutParams().height;
         }
-
-        int specWidth = MeasureSpec.getSize(widthMeasureSpec);
-        int specHeight = MeasureSpec.getSize(heightMeasureSpec);
-
 
         if (mOrientation == VERTICAL) {
             switch (MeasureSpec.getMode(widthMeasureSpec)) {
@@ -188,10 +191,10 @@ public class DashLine extends View {
         }
 
         if (mOrientation == VERTICAL) {
-            mThickness = width;
+            mThickness = width - getPaddingLeft() - getPaddingRight();
             setMeasuredDimension(width, heightMeasureSpec);
         } else {
-            mThickness = height;
+            mThickness = height - getPaddingTop() - getPaddingBottom();
             setMeasuredDimension(widthMeasureSpec, height);
         }
 
