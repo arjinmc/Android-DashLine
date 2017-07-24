@@ -30,3 +30,5 @@ or in Activity/Fragment/View
 ```
 
 You also can use setXXXX to change these attributes as above in the xml file.
+
+If you set the dashGap to zero,you will see a solid line.
